@@ -1,0 +1,106 @@
+@startuml Diagrama_Casos_de_Uso
+
+left to right direction
+
+' ==============================================================================
+' ESTILOS Y COLORES DEL PROYECTO
+' ==============================================================================
+skinparam backgroundColor #F8F9FA
+skinparam rectangleBorderColor #154C79
+skinparam rectangleBackgroundColor #FFFFFF
+skinparam rectangleFontColor #154C79
+skinparam rectangleFontSize 16
+skinparam actorBorderColor #154C79
+skinparam actorBackgroundColor #268B86
+skinparam actorFontColor #154C79
+skinparam usecaseBorderColor #154C79
+skinparam usecaseBackgroundColor #FFFFFF
+skinparam usecaseFontColor #154C79
+skinparam arrowColor #154C79
+
+' ==============================================================================
+' ACTORES (Las personas a los lados del sistema)
+' ==============================================================================
+' A la izquierda: Usuarios que usan la plataforma día a día
+actor "Usuario General" as UG
+actor "Adoptante" as ADOP
+actor "Publicador / Refugio" as PUB
+
+' A la derecha: Control y Automatización
+actor "Administrador" as ADM
+actor "Sistema Automático\n(Temporizador diario)" as SIS
+
+' ==============================================================================
+' EL RECTÁNGULO CENTRAL (Límite del Sistema / Aplicación Web)
+' ==============================================================================
+rectangle "Sistema Web de Adopción Responsable de Mascotas" as SistemaWeb {
+
+    ' Cuentas y Acceso
+    usecase "RF-01: Registrar cuenta de usuario / refugio" as RF01
+    usecase "RF-12: Revisar y aprobar/rechazar refugio" as RF12
+
+    ' Catálogo y Mascotas
+    usecase "RF-03: Publicar mascota en adopción" as RF03
+    usecase "RF-13: Modificar información de mascota" as RF13
+    usecase "RF-04: Buscar mascotas con filtros" as RF04
+    usecase "RF-09: Guardar mascotas en favoritos" as RF09
+    usecase "RF-11: Marcar mascota como adoptada" as RF11
+
+    ' Solicitudes y Adopción
+    usecase "RF-02: Contestar cuestionario de aptitud" as RF02
+    usecase "RF-07: Enviar solicitud de adopción" as RF07
+    usecase "RF-14: Consultar estado de solicitudes" as RF14
+    usecase "RF-06: Aprobar o rechazar solicitud" as RF06
+    usecase "RF-10: Programar cita o visita" as RF10
+
+    ' Comunicación
+    usecase "RF-08: Enviar mensajes (chat directo)" as RF08
+
+    ' Seguimiento Post-Adopción
+    usecase "RF-05: Subir foto y reporte mensual" as RF05
+    usecase "RF-15: Revisar seguimiento y alerta de maltrato" as RF15
+    usecase "RF-16: Notificar falta de reporte (>30 días)" as RF16
+
+    ' Relaciones internas entre óvalos
+    RF07 .> RF02 : <<include>>
+    RF11 .> RF05 : <<trigger>>
+}
+
+' ==============================================================================
+' CONEXIONES (Líneas entre las personas y los óvalos del rectángulo)
+' ==============================================================================
+
+' Usuario General
+UG --> RF01
+UG --> RF04
+
+' Adoptante
+ADOP --> RF02
+ADOP --> RF07
+ADOP --> RF14
+ADOP --> RF09
+ADOP --> RF08
+ADOP --> RF10
+ADOP --> RF05
+
+' Publicador / Refugio
+PUB --> RF03
+PUB --> RF13
+PUB --> RF06
+PUB --> RF14
+PUB --> RF10
+PUB --> RF11
+PUB --> RF08
+PUB --> RF15
+
+' Administrador
+ADM --> RF12
+ADM --> RF06
+ADM --> RF11
+ADM --> RF15
+
+' Sistema Automático
+SIS --> RF16
+RF16 ..> ADOP : notifica a
+
+@enduml
