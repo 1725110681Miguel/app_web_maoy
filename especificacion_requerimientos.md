@@ -303,3 +303,17 @@ La base de datos en Supabase contiene las siguientes entidades principales:
   4. El sistema registra el administrador responsable, la fecha del dictamen y notifica al usuario por correo electrónico.
 * **Flujo alternativo (Error):**
   1. Si se omite el motivo obligatorio, el HASH es inválido o el administrador intenta suspender su propia cuenta, el sistema rechaza la operación y muestra el mensaje correspondiente.
+
+---
+
+## 9. Asignación de Responsabilidades y Módulos por Integrante
+
+Para la fase de implementación y desarrollo del sistema, los módulos y requerimientos funcionales se distribuyen formalmente entre el equipo de desarrollo de la siguiente manera:
+
+| Integrante | Módulo Asignado | Requerimientos a Cargo | Alcance Principal |
+| :--- | :--- | :--- | :--- |
+| **Alexander** | **Módulo 1:** Autenticación y Control de Acceso | `RF01`, `RF02`, `RF03` | Registro de usuarios/refugios, inicio de sesión, cierre de sesión, cookies seguras y tokens con Supabase Auth. |
+| **Oscar** | **Módulo 2:** Catálogo y Publicaciones de Mascotas | `RF04`, `RF05`, `RF06`, `RF07`, `RF08`, `RF09` | Búsqueda con filtros, detalle de mascota, alta/edición de publicaciones, manipulación de fotos en disco, cierre y favoritos. |
+| **Miguel** | **Módulo 3:** Cuestionario, Solicitudes y Comunicación | `RF10`, `RF11`, `RF12`, `RF13`, `RF14`, `RF15`, `RF16` | Cuestionario de aptitud, gestión del ciclo de solicitudes, cancelación, evaluación con motivo, citas presenciales y mensajería segura. |
+| **Yair** | **Módulo 4:** Seguimiento Post-Adopción<br>**Módulo 5:** Administración y Moderación | `RF17`, `RF18`, `RF19`, `RF20` | Reportes fotográficos mensuales, auditoría de bienestar y alertas de maltrato, notificación automática de 30 días y moderación administrativa de cuentas. |
+
