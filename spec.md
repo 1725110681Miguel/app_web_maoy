@@ -2,7 +2,7 @@
 
 ---
 
-## 1. Objetivo del proyecto
+## 1. Objetivo
 Desarrollar una aplicación web bajo el patrón arquitectónico **Modelo-Vista-Controlador (MVC)** para la gestión responsable y segura de adopciones de perros y gatos. El sistema implementa autenticación de usuarios con roles diferenciados (*Adoptante*, *Publicador/Refugio* y *Administrador*), control de acceso basado en sesiones persistentes validadas contra base de datos y protección criptográfica de parámetros en URLs mediante firmas **HMAC/HASH** para prevenir ataques de referencia directa insegura a objetos (**IDOR**).
 
 ---
@@ -15,7 +15,7 @@ Desarrollar una aplicación web bajo el patrón arquitectónico **Modelo-Vista-C
 3. Si la sesión no existe, expiró o el rol es insuficiente, el sistema debe redirigir inmediatamente a la vista de `login`.
 
 ### RNT02 - Generación y validación de URLs firmadas (Anti-IDOR mediante HASH)
-1. Ningún identificador numérico de entidades sensibles (`id_mascota`, `id_solicitud`, `id_seguimiento`) debe exponerse en claro dentro de las URLs.
+1. Ningún identificador numérico de entidades sensibles (`id_mascota`, `id_solicitud`, `id_seguimiento`, `id_usuario`) debe exponerse en claro dentro de las URLs.
 2. El sistema generará una firma criptográfica en memoria combinando el identificador y una `SECRET_KEY` utilizando el algoritmo **HMAC-SHA256**, bajo el formato:  
    `"identificador:HASH"` (por ejemplo: `id_mascota:HASH` o `id_solicitud:HASH`).
 3. El controlador receptor verificará la firma antes de consultar la base de datos. Si el HASH no coincide o fue alterado, la petición se descartará inmediatamente mostrando un error de "Recurso no encontrado o acceso denegado", sin consultar la base de datos.
@@ -29,7 +29,7 @@ Desarrollar una aplicación web bajo el patrón arquitectónico **Modelo-Vista-C
 1. **Lenguaje de programación:** Python 3.12.
 2. **Prácticas de implementación:** Tipado estático estricto (`typing`), manejo de excepciones numerado mediante bloques `try/except` y registro de actividad mediante `logging.getLogger(__name__)` en cada módulo.
 3. **Framework web:** Microframework `web.py`.
-4. **Arquitectura:** Patrón Modelo-Vista-Controlador (MVC) con **controladores de acción única** (por ejemplo: `login.py`, `registro.py`, `cerrar_sesion.py`, `catalogo.py`, `ver_mascota.py`, `publicar_mascota.py`, `actualizar_mascota.py`, `enviar_solicitud.py`, `lista_solicitudes.py`, `evaluar_solicitud.py`, `subir_seguimiento.py`, `lista_seguimientos.py`, `revisar_refugio.py`).
+4. **Arquitectura:** Patrón Modelo-Vista-Controlador (MVC) con **controladores de acción única** (`login.py`, `registro.py`, `cerrar_sesion.py`, `catalogo.py`, `ver_mascota.py`, `publicar_mascota.py`, `actualizar_mascota.py`, `cerrar_adopcion.py`, `favoritos_mascota.py`, `cuestionario_aptitud.py`, `enviar_solicitud.py`, `lista_solicitudes.py`, `cancelar_solicitud.py`, `evaluar_solicitud.py`, `programar_cita.py`, `mensajeria_solicitud.py`, `subir_seguimiento.py`, `auditar_seguimiento.py`, `notificar_seguimiento.py`, `moderar_cuentas.py`).
 
 **Frontend:**
 1. HTML5 semántico y accesible.
@@ -60,7 +60,7 @@ La base de datos en Supabase contiene las siguientes entidades principales:
    * `telefono` (varchar / text, obligatorio).
    * `direccion` (varchar / text, obligatorio).
    * `rol` (varchar / text, obligatorio: `'Adoptante'`, `'Publicador'`, `'Admin'`).
-   * `estado_cuenta` (varchar / text, por defecto `'Activo'`, para refugios inicia en `'Pendiente'`).
+   * `estado_cuenta` (varchar / text, `'Activo'`, `'Pendiente'`, `'Suspendido'`).
 
 2. **Tabla `mascotas`:**
    * `id_mascota` (bigint / int8, Primary Key, autoincremental).
@@ -86,7 +86,7 @@ La base de datos en Supabase contiene las siguientes entidades principales:
    * `familia_de_acuerdo` (boolean, obligatorio).
    * `compromiso_gastos` (boolean, solvencia para alimento y veterinario).
    * `motivo_adopcion` (text, justificación de adopción).
-   * `estado_solicitud` (varchar / text: `'Pendiente'`, `'Aprobada'`, `'Rechazada'`).
+   * `estado_solicitud` (varchar / text: `'Pendiente'`, `'Aprobada'`, `'Rechazada'`, `'Cancelada'`).
    * `fecha_solicitud` (timestamp / date, fecha de registro).
 
 4. **Tabla `seguimientos`:**
@@ -97,6 +97,7 @@ La base de datos en Supabase contiene las siguientes entidades principales:
    * `comentario` (text, descripción de cuidados y salud actual).
    * `fecha_reporte` (timestamp / date, fecha de envío).
    * `alerta_maltrato` (boolean, falso por defecto; verdadero ante sospecha de maltrato).
+   * `dictamen_admin` (varchar / text, `'Sin Novedad'`, `'En Inspección'`, `'Rescatado'`).
 
 5. **Tabla `sesiones_abiertas`:**
    * `token` (varchar / text, Primary Key, obligatorio): Almacena los tokens JWT de sesión vigentes para validar cada petición contra la cookie de sesión de `web.py`.
@@ -124,7 +125,7 @@ La base de datos en Supabase contiene las siguientes entidades principales:
 
 ## 4. Módulo 1: Autenticación y Gestión de Usuarios
 
-### RF01 - Registro de usuario y solicitud de alta de refugio
+### RF01 - Registro de usuario y solicitud de alta de refugio (registro)
 * **Descripción:** Permite a un nuevo usuario crear una cuenta eligiendo rol de Adoptante o solicitar registro como Refugio/Publicador.
 * **Flujo principal:**
   1. El usuario completa el formulario con: nombre completo, correo, contraseña, teléfono, dirección y rol deseado.
@@ -138,7 +139,7 @@ La base de datos en Supabase contiene las siguientes entidades principales:
 * **Flujo principal:**
   1. El usuario ingresa su email y contraseña en la vista `login`.
   2. El controlador valida las credenciales contra Supabase Authentication y consulta el rol y estado en la tabla `usuarios`.
-  3. Si la cuenta está en estado `'Pendiente'`, el sistema impide el acceso e indica que su registro está en revisión por el administrador.
+  3. Si la cuenta está en estado `'Pendiente'`, el sistema impide el acceso e indica que su registro está en revisión por el administrador. Si está `'Suspendido'`, notifica el bloqueo.
   4. Si las credenciales y el estado son válidos, el sistema guarda el token en una cookie segura de sesión, inserta el token en la tabla `sesiones_abiertas` de Supabase y redirige al catálogo de mascotas (`index`).
 * **Flujo alternativo (Error):**
   1. Si las credenciales son incorrectas, muestra: *"Credenciales incorrectas, verifique sus datos"*.
@@ -154,7 +155,7 @@ La base de datos en Supabase contiene las siguientes entidades principales:
 
 ## 5. Módulo 2: Catálogo y Publicaciones de Mascotas
 
-### RF04 - Página principal y búsqueda con filtros (catalogo / index)
+### RF04 - Página principal y búsqueda con filtros (catalogo)
 * **Descripción:** Muestra el catálogo de perros y gatos disponibles para adopción con filtros de búsqueda.
 * **Flujo principal:**
   1. El controlador consulta las mascotas con estado `'Disponible'` en Supabase.
@@ -193,64 +194,96 @@ La base de datos en Supabase contiene las siguientes entidades principales:
   1. El publicador selecciona una mascota con solicitud aprobada y presiona "Confirmar Adopción".
   2. El controlador valida `id_mascota:HASH`, cambia el estado de la mascota a `'Adoptada'`, la oculta del catálogo público y activa el periodo de seguimiento de fotos mensuales.
 
+### RF09 - Guardar y gestionar mascotas favoritas (favoritos_mascota)
+* **Descripción:** Permite a un usuario con rol 'Adoptante' guardar y consultar su lista personal de mascotas de interés.
+* **Flujo principal:**
+  1. Desde `ver_mascota` o `catalogo`, el adoptante presiona "Guardar en Favoritos" o "Quitar de Favoritos" enviando `id_mascota:HASH`.
+  2. El controlador valida sesión activa, rol 'Adoptante' y firma HMAC-SHA256 del identificador.
+  3. Inserta o elimina el vínculo en la base de datos y muestra el estado actualizado.
+  4. En la vista de favoritos del adoptante, consulta las mascotas guardadas generando sus enlaces firmados `id_mascota:HASH`.
+* **Flujo alternativo (Error):**
+  1. Si el HASH es alterado o la mascota no existe, muestra *"Mascota no encontrada"* y redirige al catálogo.
+
 ---
 
-## 6. Módulo 3: Cuestionario y Solicitudes de Adopción
+## 6. Módulo 3: Cuestionario, Solicitudes y Comunicación
 
-### RF09 - Cuestionario de aptitud para adopción (cuestionario_aptitud)
+### RF10 - Cuestionario de aptitud para adopción (cuestionario_aptitud)
 * **Descripción:** Evalúa si el interesado cumple con las condiciones mínimas para tener una mascota.
 * **Flujo principal:**
   1. El adoptante responde preguntas sobre: tipo de vivienda (casa/departamento), si cuenta con patio seguro, acuerdo de la familia y compromiso para gastos médicos y alimentación.
   2. El controlador valida que las respuestas demuestren aptitud antes de habilitar el envío de la solicitud formal.
 
-### RF10 - Enviar solicitud de adopción (enviar_solicitud)
+### RF11 - Enviar solicitud de adopción (enviar_solicitud)
 * **Descripción:** Vincula al adoptante con la mascota deseada mediante una solicitud formal.
 * **Flujo principal:**
   1. Con el cuestionario validado, el adoptante confirma el envío de su solicitud para la mascota disponible.
   2. El controlador verifica que la mascota siga disponible y que el usuario no tenga otra solicitud activa para el mismo animal.
   3. Guarda el registro en la tabla `solicitudes` con estado `'Pendiente'` y fecha actual. Notifica al publicador responsable.
 
-### RF11 - Consultar estado de solicitudes (lista_solicitudes)
+### RF12 - Consultar estado de solicitudes (lista_solicitudes)
 * **Descripción:** Permite visualizar las solicitudes enviadas (adoptante) o recibidas (publicador).
 * **Flujo principal:**
   1. El controlador consulta las solicitudes correspondientes al usuario en sesión.
   2. Genera los enlaces protegidos con `id_solicitud:HASH` para cada acción.
-  3. Muestra tabla con: mascota, fecha, estado (`'Pendiente'`, `'Aprobada'`, `'Rechazada'`) y opciones.
+  3. Muestra tabla con: mascota, fecha, estado (`'Pendiente'`, `'Aprobada'`, `'Rechazada'`, `'Cancelada'`) y opciones.
 
-### RF12 - Aprobar o rechazar solicitud (evaluar_solicitud)
+### RF13 - Cancelar o desistir de una solicitud de adopción (cancelar_solicitud)
+* **Descripción:** Permite al adoptante retirar una solicitud en estado `'Pendiente'` o `'Aprobada'` antes de cerrar la adopción.
+* **Flujo principal:**
+  1. El adoptante selecciona "Cancelar solicitud" enviando `id_solicitud:HASH`.
+  2. El controlador verifica el HASH, comprueba que la solicitud pertenezca al adoptante en sesión y que su estado actual permita cancelación.
+  3. Actualiza `estado_solicitud` a `'Cancelada'` y notifica al publicador responsable.
+  4. Si la mascota estaba en `'En Proceso'` sin otras solicitudes, la retorna a `'Disponible'`.
+* **Flujo alternativo (Error):**
+  1. Si la mascota ya fue marcada como `'Adoptada'` o la solicitud no pertenece al usuario, bloquea la acción con mensaje de error.
+
+### RF14 - Aprobar o rechazar solicitud (evaluar_solicitud)
 * **Descripción:** Permite al publicador decidir sobre una solicitud de adopción recibida.
 * **Flujo principal:**
   1. El publicador recibe `id_solicitud:HASH`, valida la firma y revisa las respuestas del adoptante.
   2. Presiona "Aprobar" o "Rechazar" (ingresando un motivo si rechaza).
   3. El controlador actualiza el campo `estado_solicitud` en Supabase y notifica el resultado al adoptante.
 
-### RF13 - Programar cita o visita (programar_cita)
+### RF15 - Programar cita o visita (programar_cita)
 * **Descripción:** Permite coordinar un encuentro en persona para conocer a la mascota.
 * **Flujo principal:**
   1. Ante una solicitud aprobada, el publicador propone fecha, hora y lugar de encuentro.
   2. El sistema notifica al adoptante y registra la fecha de la cita vinculada a la solicitud.
 
+### RF16 - Mensajería segura entre adoptante y publicador (mensajeria_solicitud)
+* **Descripción:** Permite intercambiar mensajes acotados a una solicitud de adopción activa sin exponer datos personales sensibles ni identificadores numéricos en claro.
+* **Flujo principal:**
+  1. El adoptante o el publicador dueño de la mascota accede desde `lista_solicitudes` mediante `id_solicitud:HASH`.
+  2. El controlador valida sesión activa, rol autorizado y que el usuario sea parte de la solicitud.
+  3. Muestra el historial de mensajes ordenado cronológicamente y permite enviar un nuevo mensaje de texto validado contra XSS.
+  4. Registra el mensaje con fecha y hora, marcándolo como no leído para la contraparte.
+* **Flujo alternativo (Error):**
+  1. Si el HASH es inválido o el mensaje está vacío, rechaza la operación sin consultar datos.
+
 ---
 
 ## 7. Módulo 4: Seguimiento Post-Adopción y Bienestar Animal
 
-### RF14 - Subir evidencia y fotos de seguimiento (subir_seguimiento)
+### RF17 - Subir evidencia y fotos de seguimiento (subir_seguimiento)
 * **Descripción:** Permite al adoptante enviar fotos y reportes periódicos para comprobar el buen estado de la mascota adoptada.
 * **Flujo principal:**
-  1. El adoptante ingresa a su sección de mascotas adoptadas y selecciona "Enviar Reporte Mensual" pasando `id_mascota:HASH`.
+  1. El adoptante ingresa a sus adopciones activas y selecciona "Enviar Reporte Mensual" pasando `id_mascota:HASH`.
   2. Adjunta una fotografía actual de la mascota y una descripción de su estado de salud y cuidados.
   3. El controlador valida la imagen, la almacena en `static/fotos/` y guarda el registro en la tabla `seguimientos` con la fecha actual y `alerta_maltrato = false`.
 * **Flujo alternativo:**
   1. Si falta la fotografía o la descripción, el sistema no permite el envío y solicita completar la información.
 
-### RF15 - Revisar seguimiento y registrar alerta de maltrato (revisar_seguimiento)
-* **Descripción:** Permite al publicador y administrador auditar las evidencias fotográficas y reportar irregularidades.
+### RF18 - Auditar seguimiento y atender alertas de maltrato (auditar_seguimiento)
+* **Descripción:** Permite al publicador y al administrador supervisar el historial de evidencias fotográficas, registrar alertas por descuido o maltrato y documentar acciones de intervención y rescate. *(Unifica la detección de maltrato y la gestión del caso de intervención).*
 * **Flujo principal:**
-  1. El publicador o administrador consulta el historial de reportes de una mascota mediante `id_mascota:HASH`.
-  2. Si la foto o las condiciones evidencian descuido, abandono o maltrato, presiona "Activar Alerta de Maltrato".
-  3. El sistema actualiza `alerta_maltrato = true` en la tabla `seguimientos`, emitiendo una notificación prioritaria al panel de administración para intervención y posible rescate.
+  1. El publicador o administrador consulta el historial de reportes de una mascota mediante `id_mascota:HASH` o `id_seguimiento:HASH`.
+  2. Si la fotografía o los comentarios evidencian descuido, abandono o lesiones, se presiona "Activar Alerta de Maltrato", actualizando `alerta_maltrato = true`.
+  3. El administrador revisa el expediente completo y registra el dictamen de intervención (`'En Inspección'`, `'Rescatado'` o `'Falsa Alarma'`), guardando notas de auditoría y, si procede, bloqueando temporalmente la cuenta del adoptante responsable.
+* **Flujo alternativo (Error):**
+  1. Si un usuario no autorizado o con HASH inválido intenta modificar la alerta, deniega el acceso y registra el evento en `logging.getLogger(__name__)`.
 
-### RF16 - Notificar falta de seguimiento mensual (notificar_seguimiento)
+### RF19 - Notificar falta de seguimiento mensual (notificar_seguimiento)
 * **Descripción:** Tarea periódica de supervisión que detecta adopciones sin reporte reciente.
 * **Flujo principal:**
   1. El sistema ejecuta una revisión automática calculando los días transcurridos desde el último reporte registrado en `seguimientos` (o desde la fecha de adopción si es el primero).
@@ -259,12 +292,14 @@ La base de datos en Supabase contiene las siguientes entidades principales:
 
 ---
 
-## 8. Módulo 5: Administración y Moderación de Refugios
+## 8. Módulo 5: Administración y Moderación del Sistema
 
-### RF17 - Revisar y dictaminar registro de refugio (revisar_refugio)
-* **Descripción:** Permite al administrador revisar y aprobar o rechazar solicitudes de alta de nuevos refugios.
+### RF20 - Moderar y dictaminar cuentas de usuarios y refugios (moderar_cuentas)
+* **Descripción:** Permite al administrador revisar solicitudes de alta de nuevos refugios, emitir dictámenes de aprobación o rechazo, así como suspender o reactivar cuentas por infracciones. *(Unifica la aprobación de refugios y la moderación de cuentas de usuario).*
 * **Flujo principal:**
-  1. El administrador ingresa a su panel y visualiza las cuentas de tipo *Publicador/Refugio* en estado `'Pendiente'`.
-  2. Revisa los datos de contacto, dirección y documentación del refugio.
-  3. Selecciona "Aprobar" (cambia estado a `'Activo'`) o "Rechazar" (escribiendo obligatoriamente un motivo de rechazo).
-  4. El sistema actualiza la tabla `usuarios` y notifica la decisión por correo electrónico al solicitante.
+  1. El administrador consulta en el panel administrativo el listado de usuarios y refugios filtrados por estado (`'Pendiente'`, `'Activo'`, `'Suspendido'`) pasando `id_usuario:HASH`.
+  2. **Dictamen de refugios:** Ante cuentas de refugio `'Pendiente'`, revisa documentación y selecciona "Aprobar" (pasa a `'Activo'`) o "Rechazar" (con motivo obligatorio).
+  3. **Moderación de cuentas:** Ante infracciones o sospechas fundadas, selecciona "Suspender cuenta" (con motivo obligatorio), lo cual revoca inmediatamente sus tokens en `sesiones_abiertas` de Supabase, o "Reactivar cuenta".
+  4. El sistema registra el administrador responsable, la fecha del dictamen y notifica al usuario por correo electrónico.
+* **Flujo alternativo (Error):**
+  1. Si se omite el motivo obligatorio, el HASH es inválido o el administrador intenta suspender su propia cuenta, el sistema rechaza la operación y muestra el mensaje correspondiente.
