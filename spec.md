@@ -2,7 +2,7 @@
 
 ---
 
-## 1. Objetivo
+## 1. Objetivo del proyecto
 Desarrollar una aplicación web bajo el patrón arquitectónico **Modelo-Vista-Controlador (MVC)** para la gestión responsable y segura de adopciones de perros y gatos. El sistema implementa autenticación de usuarios con roles diferenciados (*Adoptante*, *Publicador/Refugio* y *Administrador*), control de acceso basado en sesiones persistentes validadas contra base de datos y protección criptográfica de parámetros en URLs mediante firmas **HMAC/HASH** para prevenir ataques de referencia directa insegura a objetos (**IDOR**).
 
 ---
