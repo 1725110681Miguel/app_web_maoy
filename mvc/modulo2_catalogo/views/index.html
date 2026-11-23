@@ -1,0 +1,125 @@
+$def with ()
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopción Responsable de Mascotas - Inicio</title>
+    <style>
+        :root {
+            --blanco-humo: #F8F9FA;
+            --azul-marino: #154C79;
+            --verde-agua: #268B86;
+            --naranja-coral: #F4A261;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--blanco-humo);
+            color: #333;
+        }
+
+        header {
+            background-color: var(--azul-marino);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: var(--naranja-coral);
+        }
+
+        .hero {
+            background-color: var(--verde-agua);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .hero h2 {
+            margin-top: 0;
+            font-size: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--naranja-coral);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🐾 Adopción de Mascotas</h1>
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="/login">Iniciar Sesión</a>
+            <a href="/registro">Registrarse</a>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h2>Encuentra a tu nuevo mejor amigo</h2>
+        <p>Plataforma segura y responsable para la adopción de perros y gatos.</p>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h3>Catálogo de Mascotas en Adopción</h3>
+            <p>Aquí se mostrarán las mascotas disponibles para adopción.</p>
+            <p>¡El sistema está configurado y funcionando correctamente con la arquitectura MVC!</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Plataforma de Adopción Responsable de Mascotas</p>
+    </footer>
+</body>
+</html>
