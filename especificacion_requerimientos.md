@@ -268,3 +268,61 @@ La base de datos en Supabase contiene las siguientes entidades principales:
   2. Revisa los datos de contacto, dirección y documentación del refugio.
   3. Selecciona "Aprobar" (cambia estado a `'Activo'`) o "Rechazar" (escribiendo obligatoriamente un motivo de rechazo).
   4. El sistema actualiza la tabla `usuarios` y notifica la decisión por correo electrónico al solicitante.
+
+ ## RF18 - Mensajería segura entre adoptante y publicador (mensajeria_solicitud)
+* ** Descripción: Permite intercambiar mensajes acotados a una solicitud de adopción activa sin exponer datos personales sensibles ni identificadores numéricos en claro.
+* **Flujo principal:
+  1. El adoptante o el publicador dueño de la mascota accede desde lista_solicitudes mediante id_solicitud:HASH.
+  2. El controlador valida sesión activa, rol autorizado y que el usuario sea el adoptante solicitante o el publicador de la mascota vinculada a la solicitud.
+  3. Muestra el historial de mensajes ordenado cronológicamente y permite enviar un nuevo mensaje de texto validado (longitud máxima, saneamiento contra XSS).
+  4. Registra el mensaje con id_solicitud, id_remitente, mensaje y fecha_envio, marcando como no leído para la contraparte.
+* ** Flujo alternativo (Error):
+* ** Si el HASH es inválido, la solicitud no pertenece al usuario o el mensaje está vacío, rechaza la operación y muestra el mensaje correspondiente sin consultar o insertar   datos inválidos.
+
+
+
+## RF19 - Cancelar o desistir de una solicitud de adopción (cancelar_solicitud)
+* ** Descripción: Permite al adoptante retirar una solicitud en estado 'Pendiente' o 'Aprobada' antes de cerrar la adopción.
+  * Flujo principal:
+  1. El adoptante selecciona "Cancelar solicitud" enviando id_solicitud:HASH.
+  2. El controlador verifica el HASH, comprueba que id_solicitud.id_adoptante coincida con el usuario autenticado y que el estado actual permita cancelación.
+  3. Actualiza estado_solicitud a 'Cancelada' (registrando fecha/motivo opcional) y notifica al publicador responsable.
+  4. Si la mascota había quedado en 'En Proceso' sin otras solicitudes aprobadas, evalúa devolverla a 'Disponible' y redirige a lista_solicitudes.
+* Flujo alternativo (Error):
+* Si la mascota ya fue marcada como 'Adoptada' o la solicitud pertenece a otro usuario, bloquea la acción y notifica que la solicitud no puede cancelarse.
+  Módulo 2 (Continuación): Catálogo y Publicaciones de Mascotas
+
+
+## RF20 - Guardar y gestionar mascotas favoritas (favoritos_mascota)
+* Descripción: Permite a un usuario con rol 'Adoptante' guardar y consultar su lista personal de mascotas de interés.
+* Flujo principal:
+  1. Desde ver_mascota o catalogo, el adoptante presiona "Guardar en Favoritos" o "Quitar de Favoritos" enviando id_mascota:HASH.
+  2. El controlador valida sesión activa, rol 'Adoptante' y firma HMAC-SHA256 del identificador.
+  3. Inserta o elimina el vínculo (id_usuario, id_mascota) en la tabla de favoritos y muestra el estado actualizado.
+  4. En la vista de favoritos del adoptante, consulta las mascotas guardadas generando sus enlaces firmados id_mascota:HASH.
+* Flujo alternativo (Error):
+* Si el HASH es alterado o la mascota no existe, muestra "Mascota no encontrada" y redirige al catálogo.
+  Módulo 4 (Continuación): Seguimiento Post-Adopción y Bienestar Animal
+
+
+## RF21 - Gestionar caso de alerta de maltrato y rescate (atender_alerta_maltrato)
+* Descripción: Permite al administrador dar seguimiento formal y registrar acciones de intervención ante reportes marcados con alerta_maltrato = true.
+* Flujo principal:
+  1. El administrador ingresa al panel de alertas y selecciona un reporte mediante id_seguimiento:HASH.
+  2. El controlador valida sesión activa, rol 'Admin' y la firma HMAC-SHA256 de id_seguimiento.
+  3. Muestra la evidencia fotográfica (static/fotos/), datos de la mascota, adoptante, publicador y el historial de seguimientos asociado.
+  4. Permite registrar el dictamen de intervención (por ejemplo: 'En Inspección', 'Rescate Realizado' o 'Falsa Alarma'), notas de auditoría y, si procede, actualizar el estado de la mascota o bloquear temporalmente la cuenta del adoptante responsable.
+* Flujo alternativo (Error):
+* Si el usuario no tiene rol 'Admin' o el HASH es inválido, deniega el acceso inmediatamente y registra el intento en logging.getLogger(__name__).
+  Módulo 5 (Continuación): Administración y Moderación de Refugios
+
+  
+## RF22 - Suspender o reactivar cuentas de usuarios y refugios (moderar_usuario)
+* Descripción: Permite al administrador suspender cuentas por incumplimiento de normas o reactivar cuentas previamente suspendidas.
+* Flujo principal:
+  1. El administrador consulta el listado de usuarios en el panel administrativo y selecciona una cuenta mediante id_usuario:HASH.
+  2. El controlador verifica sesión activa, rol 'Admin' y firma HMAC-SHA256 del identificador (impidiendo que el administrador suspenda su propia sesión activa).
+  3. Al seleccionar "Suspender" (con motivo obligatorio) o "Reactivar", actualiza estado_cuenta en usuarios ('Suspendido' / 'Activo') y, si se suspende, revoca o elimina las sesiones activas de ese usuario en sesiones_abiertas de Supabase.
+  4. Registra la acción en el log del sistema y muestra confirmación.
+* Flujo alternativo (Error):
+* Si se omite el motivo de suspensión, el HASH es inválido o el objetivo es la propia cuenta del administrador, rechaza la operación y muestra el error correspondiente.
