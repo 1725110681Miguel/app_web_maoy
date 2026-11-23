@@ -1,0 +1,30 @@
+$def with (rol, filas, avisos)
+$var titulo: Mis solicitudes
+$if filas:
+    <div class="tabla"><table>
+    <caption>$("Solicitudes enviadas" if rol == "Adoptante" else "Solicitudes recibidas")</caption>
+    <thead><tr><th>Mascota</th><th>Fecha</th><th>Estado</th><th>Opciones</th></tr></thead><tbody>
+    $for f in filas:
+        <tr><td>$f['mascotas']['nombre']</td><td>$(f['fecha_solicitud'][:10])</td><td>$f['estado_solicitud']
+        $if f.get('motivo_rechazo'):
+            <p>$f['motivo_rechazo']</p>
+        </td><td>
+        $if f['activa']:
+            <a href="/mensajeria_solicitud/$f['enlace']">Mensajes</a>
+            $if rol == 'Adoptante':
+                <a href="/cancelar_solicitud/$f['enlace']">Cancelar</a>
+            $elif f['estado_solicitud'] == 'Pendiente':
+                <a href="/evaluar_solicitud/$f['enlace']">Evaluar</a>
+            $else:
+                <a href="/programar_cita/$f['enlace']">Programar cita</a>
+        $else:
+            Sin acciones disponibles
+        </td></tr>
+    </tbody></table></div>
+$else:
+    <p>Aún no tienes solicitudes.</p>
+$if avisos:
+    <h2>Avisos recientes</h2><ul>
+    $for aviso in avisos:
+        <li>$aviso['mensaje']</li>
+    </ul>

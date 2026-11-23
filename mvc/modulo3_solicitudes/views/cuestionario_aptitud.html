@@ -1,0 +1,20 @@
+$def with (nombre, csrf)
+$var titulo: Cuestionario de aptitud
+<p>Cuéntanos cómo cuidarías a <strong>$nombre</strong>.</p>
+<form method="post">
+    <input type="hidden" name="csrf" value="$csrf">
+    <label>Tipo de vivienda
+        <select name="tipo_vivienda" required><option value="">Elige una opción</option><option>Casa propia</option><option>Departamento</option><option>Renta</option></select>
+    </label>
+    <label>¿Cuentas con patio seguro?
+        <select name="tiene_patio" required><option value="">Elige una opción</option><option value="si">Sí</option><option value="no">No</option></select>
+    </label>
+    <label>¿Tu familia está de acuerdo con la adopción?
+        <select name="familia_de_acuerdo" required><option value="">Elige una opción</option><option value="si">Sí</option><option value="no">No</option></select>
+    </label>
+    <label>¿Te comprometes a cubrir los gastos de alimento y atención veterinaria?
+        <select name="compromiso_gastos" required><option value="">Elige una opción</option><option value="si">Sí</option><option value="no">No</option></select>
+    </label>
+    <label>¿Por qué te gustaría adoptar? (opcional)<textarea name="motivo_adopcion" maxlength="1500"></textarea></label>
+    <button>Revisar solicitud</button>
+</form>

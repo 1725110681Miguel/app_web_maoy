@@ -1,0 +1,13 @@
+$def with (mensajes, csrf)
+$var titulo: Mensajes de la solicitud
+$if mensajes:
+    <ol class="mensajes">
+    $for m in mensajes:
+        <li><strong>$("Tú" if m["propio"] else "Contacto")</strong> <time>$m['fecha_envio']</time><p>$m['contenido']</p>
+        $if m['propio']:
+            <small>$("Leído" if m["leido"] else "Enviado")</small>
+        </li>
+    </ol>
+$else:
+    <p>Todavía no hay mensajes en esta solicitud.</p>
+<form method="post"><input type="hidden" name="csrf" value="$csrf"><label>Tu mensaje<textarea name="contenido" required maxlength="4000"></textarea></label><button>Enviar mensaje</button></form>

@@ -1,0 +1,10 @@
+$def with (nombre, csrf)
+$var titulo: Programar cita
+<p>Propón un encuentro para conocer a <strong>$nombre</strong>. El adoptante recibirá los detalles.</p>
+<form method="post">
+    <input type="hidden" name="csrf" value="$csrf">
+    <label>Fecha<input type="date" name="fecha" required></label>
+    <label>Hora del centro de México<input type="time" name="hora" required></label>
+    <label>Lugar de encuentro<input name="lugar" maxlength="250" required></label>
+    <button>Confirmar cita</button>
+</form>

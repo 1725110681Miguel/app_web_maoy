@@ -1,0 +1,10 @@
+$def with (nombre, respuestas, csrf)
+$var titulo: Confirmar solicitud
+<p>Vas a solicitar la adopción de <strong>$nombre</strong>.</p>
+<dl>
+    <dt>Vivienda</dt><dd>$respuestas['tipo_vivienda']</dd>
+    <dt>Patio seguro</dt><dd>$("Sí" if respuestas["tiene_patio"] else "No")</dd>
+    <dt>Acuerdo familiar y compromiso de gastos</dt><dd>Confirmados</dd>
+    <dt>Motivo</dt><dd>$(respuestas["motivo_adopcion"] or "Sin especificar")</dd>
+</dl>
+<form method="post"><input type="hidden" name="csrf" value="$csrf"><button>Enviar solicitud al publicador</button></form>

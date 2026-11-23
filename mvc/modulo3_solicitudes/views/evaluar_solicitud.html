@@ -1,0 +1,15 @@
+$def with (fila, csrf)
+$var titulo: Evaluar solicitud
+<p>Solicitud para adoptar a <strong>$fila['mascotas']['nombre']</strong>.</p>
+<dl>
+    <dt>Vivienda</dt><dd>$fila['tipo_vivienda']</dd>
+    <dt>Patio seguro</dt><dd>$("Sí" if fila["tiene_patio"] else "No")</dd>
+    <dt>Acuerdo familiar</dt><dd>$("Sí" if fila["familia_de_acuerdo"] else "No")</dd>
+    <dt>Compromiso de gastos</dt><dd>$("Sí" if fila["compromiso_gastos"] else "No")</dd>
+    <dt>Motivo de adopción</dt><dd>$(fila["motivo_adopcion"] or "Sin especificar")</dd>
+</dl>
+<form method="post">
+    <input type="hidden" name="csrf" value="$csrf">
+    <label>Motivo del rechazo (obligatorio si rechazas)<textarea name="motivo" maxlength="1500"></textarea></label>
+    <div><button name="estado" value="Aprobada">Aprobar</button> <button name="estado" value="Rechazada">Rechazar</button></div>
+</form>
