@@ -11,5 +11,5 @@ $var titulo: Evaluar solicitud
 <form method="post">
     <input type="hidden" name="csrf" value="$csrf">
     <label>Motivo del rechazo (obligatorio si rechazas)<textarea name="motivo" maxlength="1500"></textarea></label>
-    <div><button name="estado" value="Aprobada">Aprobar</button> <button name="estado" value="Rechazada">Rechazar</button></div>
+    <div class="acciones"><button name="estado" value="Aprobada">Aprobar</button> <button class="secundario" name="estado" value="Rechazada">Rechazar</button></div>
 </form>

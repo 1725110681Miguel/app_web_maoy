@@ -3,12 +3,12 @@ $var titulo: Mis solicitudes
 $if filas:
     <div class="tabla"><table>
     <caption>$("Solicitudes enviadas" if rol == "Adoptante" else "Solicitudes recibidas")</caption>
-    <thead><tr><th>Mascota</th><th>Fecha</th><th>Estado</th><th>Opciones</th></tr></thead><tbody>
+    <thead><tr><th scope="col">Mascota</th><th scope="col">Fecha</th><th scope="col">Estado</th><th scope="col">Opciones</th></tr></thead><tbody>
     $for f in filas:
-        <tr><td>$f['mascotas']['nombre']</td><td>$(f['fecha_solicitud'][:10])</td><td>$f['estado_solicitud']
+        <tr><td data-label="Mascota">$f['mascotas']['nombre']</td><td data-label="Fecha">$(f['fecha_solicitud'][:10])</td><td data-label="Estado"><span class="estado">$f['estado_solicitud']</span>
         $if f.get('motivo_rechazo'):
             <p>$f['motivo_rechazo']</p>
-        </td><td>
+        </td><td data-label="Opciones">
         $if f['activa']:
             <a href="/mensajeria_solicitud/$f['enlace']">Mensajes</a>
             $if rol == 'Adoptante':
@@ -22,9 +22,9 @@ $if filas:
         </td></tr>
     </tbody></table></div>
 $else:
-    <p>Aún no tienes solicitudes.</p>
+    <div class="vacio"><p>Aún no tienes solicitudes.</p></div>
 $if avisos:
-    <h2>Avisos recientes</h2><ul>
+    <h2>Avisos recientes</h2><ul class="avisos">
     $for aviso in avisos:
         <li>$aviso['mensaje']</li>
     </ul>

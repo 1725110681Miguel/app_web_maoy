@@ -1,125 +1,34 @@
 $def with ()
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adopción Responsable de Mascotas - Inicio</title>
-    <style>
-        :root {
-            --blanco-humo: #F8F9FA;
-            --azul-marino: #154C79;
-            --verde-agua: #268B86;
-            --naranja-coral: #F4A261;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: var(--blanco-humo);
-            color: #333;
-        }
-
-        header {
-            background-color: var(--azul-marino);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 1.5rem;
-            font-weight: bold;
-        }
-
-        nav a:hover {
-            color: var(--naranja-coral);
-        }
-
-        .hero {
-            background-color: var(--verde-agua);
-            color: white;
-            text-align: center;
-            padding: 3rem 1rem;
-        }
-
-        .hero h2 {
-            margin-top: 0;
-            font-size: 2rem;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .btn {
-            display: inline-block;
-            background-color: var(--naranja-coral);
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 1rem;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            color: #777;
-            font-size: 0.9rem;
-            margin-top: 2rem;
-        }
-    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Adopción responsable · AdopetMAOW</title>
+    <link rel="stylesheet" href="/static/css/solicitudes.css">
 </head>
 <body>
-    <header>
-        <h1>🐾 Adopción de Mascotas</h1>
-        <nav>
-            <a href="/">Inicio</a>
-            <a href="/login">Iniciar Sesión</a>
-            <a href="/registro">Registrarse</a>
-        </nav>
-    </header>
-
-    <div class="hero">
-        <h2>Encuentra a tu nuevo mejor amigo</h2>
-        <p>Plataforma segura y responsable para la adopción de perros y gatos.</p>
-    </div>
-
-    <div class="container">
-        <div class="card">
-            <h3>Catálogo de Mascotas en Adopción</h3>
-            <p>Aquí se mostrarán las mascotas disponibles para adopción.</p>
-            <p>¡El sistema está configurado y funcionando correctamente con la arquitectura MVC!</p>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header>
+    <nav aria-label="Navegación principal">
+        <a class="marca" href="/" aria-label="AdopetMAOW, inicio">Adopet<span>MAOW</span></a>
+        <div class="enlaces"><a href="/" aria-current="page">Inicio</a><a href="/login">Iniciar sesión</a><a class="registro" href="/registro">Registrarse</a></div>
+    </nav>
+</header>
+<main id="contenido">
+    <section class="bienvenida" aria-labelledby="bienvenida-titulo">
+        <div>
+            <h1 id="bienvenida-titulo">Un nuevo hogar.<br>Una amistad <em>para siempre.</em></h1>
+            <p>Adoptar es acompañar, cuidar y compartir. Da el primer paso hacia una adopción responsable de perros y gatos.</p>
+            <a class="boton" href="#catalogo">Explorar el catálogo <span aria-hidden="true">→</span></a>
         </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 Plataforma de Adopción Responsable de Mascotas</p>
-    </footer>
+        <div class="ilustracion" aria-hidden="true"><div class="huella"><i></i><i></i><i></i><i></i><b></b></div></div>
+    </section>
+    <section id="catalogo" aria-labelledby="catalogo-titulo">
+        <h2 id="catalogo-titulo">Encuentra a tu próximo compañero</h2>
+        <div class="vacio"><p>Estamos preparando el catálogo de adopción. Aquí podrás conocer a los perros y gatos cuando sus publicaciones estén disponibles.</p></div>
+    </section>
+</main>
+<footer>AdopetMAOW · Adopción responsable, una historia a la vez.</footer>
 </body>
 </html>

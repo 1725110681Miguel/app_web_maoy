@@ -8,10 +8,12 @@ $def with (contenido)
     <link rel="stylesheet" href="/static/css/solicitudes.css">
 </head>
 <body>
-<header><nav aria-label="Navegación principal"><a href="/">AdopetMAOW</a><a href="/lista_solicitudes">Mis solicitudes</a></nav></header>
-<main>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header><nav aria-label="Navegación principal"><a class="marca" href="/">Adopet<span>MAOW</span></a><div class="enlaces"><a href="/">Inicio</a><a href="/lista_solicitudes">Mis solicitudes</a></div></nav></header>
+<main id="contenido">
     <h1>$contenido.titulo</h1>
     $:contenido
 </main>
+<footer>AdopetMAOW · Cada paso cuenta para una adopción responsable.</footer>
 </body>
 </html>

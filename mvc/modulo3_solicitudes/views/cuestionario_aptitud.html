@@ -1,6 +1,7 @@
 $def with (nombre, csrf)
 $var titulo: Cuestionario de aptitud
 <p>Cuéntanos cómo cuidarías a <strong>$nombre</strong>.</p>
+<p class="ayuda">Vivir en departamento o no tener patio no te descalifica. Para continuar necesitas el acuerdo familiar y el compromiso de cubrir alimento y atención veterinaria.</p>
 <form method="post">
     <input type="hidden" name="csrf" value="$csrf">
     <label>Tipo de vivienda
