@@ -1,0 +1,59 @@
+$def with (contenido, vista_previa=False)
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>$contenido.titulo · AdoPetMyao</title>
+    <link rel="stylesheet" href="/modulo3/estilos.css?v=2">
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="barra">
+    <nav class="navegacion" aria-label="Navegación principal">
+        <a class="marca" href="/" aria-label="AdoPetMyao, inicio">AdoPet<span>Myao</span></a>
+        <div class="enlaces">
+            <a href="/">Inicio</a>
+            <a href="/auditar_seguimiento">Auditoría</a>
+            <a href="/notificar_seguimiento">Control 30 días</a>
+            <a class="enlace-panel" href="/moderar_cuentas">Moderar cuentas</a>
+        </div>
+    </nav>
+</header>
+<main id="contenido">
+    $if vista_previa:
+        <section class="previa" aria-label="Vista previa del módulo 5">
+            <p><strong>Vista previa · Módulo 5 (Administración y Moderación).</strong> Datos simulados para revisar el diseño y flujos.</p>
+            <nav aria-label="Pantallas de demostración">
+                <a href="/moderar_cuentas">Listado de cuentas</a>
+                <a href="/moderar_cuentas/demostracion">Dictaminar cuenta</a>
+            </nav>
+        </section>
+    <div class="cabecera">
+        <p class="rotulo">ADMINISTRACIÓN Y MODERACIÓN / CONTROL DE CUENTAS</p>
+        <h1>$contenido.titulo</h1>
+    </div>
+    <div class="distribucion $('amplia' if contenido.get('layout') == 'amplia' else '')">
+        <div class="contenido">
+            $if vista_previa:
+                <fieldset class="demostracion" disabled aria-label="Contenido de demostración">
+                    $:contenido
+                </fieldset>
+            $else:
+                $:contenido
+        </div>
+        $if contenido.get('layout') != 'amplia':
+            <aside class="orientacion" aria-labelledby="orientacion-titulo">
+                <h2 id="orientacion-titulo">Criterios de moderación</h2>
+                <ol>
+                    <li><strong>Refugios pendientes</strong><span>Verifica datos de contacto y dirección antes de aprobar.</span></li>
+                    <li><strong>Motivo obligatorio</strong><span>Documenta con claridad todo rechazo o suspensión.</span></li>
+                    <li><strong>Revocación inmediata</strong><span>Al suspender una cuenta se cierran todas sus sesiones activas.</span></li>
+                </ol>
+                <p>El administrador nunca puede moderar ni suspender su propia cuenta.</p>
+            </aside>
+    </div>
+</main>
+<footer><strong>AdoPetMyao</strong><span>Moderación y gobierno del sistema.</span></footer>
+</body>
+</html>

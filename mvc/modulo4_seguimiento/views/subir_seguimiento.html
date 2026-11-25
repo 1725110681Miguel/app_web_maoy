@@ -1,0 +1,17 @@
+$def with (nombre_mascota, enlace, csrf)
+$var titulo: Subir seguimiento mensual
+<p>Reporta el estado actual de bienestar de <strong>$nombre_mascota</strong>.</p>
+<p class="ayuda">La fotografía debe estar en formato <strong>.jpg, .jpeg, .png o .webp</strong> (máximo 5 MB) y mostrar claramente a la mascota.</p>
+<form method="post" action="/subir_seguimiento/$enlace" enctype="multipart/form-data">
+    <input type="hidden" name="csrf" value="$csrf">
+    <label>Fotografía actual de evidencia
+        <input type="file" name="foto_evidencia" accept=".jpg,.jpeg,.png,.webp" required>
+    </label>
+    <label>Estado de salud, alimentación y cuidados
+        <textarea name="comentario" minlength="10" maxlength="2000" required placeholder="Describe cómo se encuentra tu mascota, su alimentación, visitas veterinarias y entorno..."></textarea>
+    </label>
+    <div class="acciones">
+        <button type="submit">Enviar reporte mensual</button>
+        <a class="boton secundario" href="/subir_seguimiento">Volver a mis adopciones</a>
+    </div>
+</form>

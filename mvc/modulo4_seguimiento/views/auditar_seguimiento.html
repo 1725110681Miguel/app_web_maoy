@@ -1,0 +1,50 @@
+$def with (rol, filas, filtro, por_mascota)
+$var titulo: Auditoría de seguimientos
+$var layout: amplia
+<p>Supervisa las evidencias fotográficas post-adopción y atiende posibles alertas de maltrato animal.</p>
+$if not por_mascota:
+    <div class="filtros" role="navigation" aria-label="Filtrar seguimientos">
+        <a class="filtro $('activo' if filtro == 'todos' else '')" href="/auditar_seguimiento?filtro=todos">Todos los reportes</a>
+        <a class="filtro $('activo' if filtro == 'alertas' else '')" href="/auditar_seguimiento?filtro=alertas">Solo con alerta de maltrato</a>
+    </div>
+$else:
+    <p><a class="boton secundario" href="/auditar_seguimiento">Ver todos los seguimientos</a></p>
+
+$if filas:
+    <div class="tabla"><table>
+    <caption>Historial de reportes post-adopción</caption>
+    <thead>
+        <tr>
+            <th scope="col">Mascota</th>
+            <th scope="col">Adoptante</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Estado y dictamen</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    $for f in filas:
+        <tr>
+            <td data-label="Mascota">
+                <strong>$f['mascotas']['nombre']</strong><br>
+                <small>$f['mascotas']['especie'] · $f['mascotas']['raza']</small>
+            </td>
+            <td data-label="Adoptante">$f['usuarios']['nombre_completo']</td>
+            <td data-label="Fecha">$((f['fecha_reporte'] or '')[:10])</td>
+            <td data-label="Estado y dictamen">
+                $if f['alerta_maltrato']:
+                    <span class="estado alerta">Alerta de maltrato</span>
+                $else:
+                    <span class="estado">Sin alerta</span>
+                <span class="estado" data-dictamen="$f['dictamen_admin']">$f['dictamen_admin']</span>
+            </td>
+            <td data-label="Acciones">
+                <a href="/auditar_seguimiento/$f['enlace']">Revisar expediente</a>
+                $if not por_mascota:
+                    <a href="/auditar_seguimiento/mascota/$f['enlace_mascota']">Historial mascota</a>
+            </td>
+        </tr>
+    </tbody>
+    </table></div>
+$else:
+    <div class="vacio"><p>No hay reportes de seguimiento que coincidan con este filtro.</p></div>

@@ -1,0 +1,43 @@
+$def with (atrasados, csrf, enviadas="")
+$var titulo: Control de inactividad (30 días)
+$var layout: amplia
+<p>Supervisa adopciones que superaron los 30 días naturales sin evidencia fotográfica y envía recordatorios automáticos.</p>
+$if enviadas != "":
+    <div class="resumen-aviso" role="status">
+        <p><strong>Revisión ejecutada:</strong> Se generaron <strong>$enviadas</strong> notificaciones nuevas de advertencia.</p>
+    </div>
+
+<form method="post" action="/notificar_seguimiento">
+    <input type="hidden" name="csrf" value="$csrf">
+    <div class="acciones">
+        <button type="submit">Ejecutar notificación de inactivos (&gt;30 días)</button>
+        <a class="boton secundario" href="/auditar_seguimiento">Ir a auditoría</a>
+    </div>
+</form>
+
+$if atrasados:
+    <h2>Adopciones con reporte atrasado</h2>
+    <div class="tabla"><table>
+    <caption>Mascotas con más de 30 días sin nuevo reporte</caption>
+    <thead>
+        <tr>
+            <th scope="col">Mascota</th>
+            <th scope="col">Adoptante</th>
+            <th scope="col">Última actividad</th>
+            <th scope="col">Días transcurridos</th>
+            <th scope="col">Seguimiento</th>
+        </tr>
+    </thead>
+    <tbody>
+    $for c in atrasados:
+        <tr>
+            <td data-label="Mascota"><strong>$c['nombre_mascota']</strong> ($c['especie'])</td>
+            <td data-label="Adoptante">$c['adoptante']<br><small>$c['correo_adoptante']</small></td>
+            <td data-label="Última actividad">$c['ultima_actividad']</td>
+            <td data-label="Días transcurridos"><span class="estado advertencia">$c['dias_sin_reporte'] días</span></td>
+            <td data-label="Seguimiento"><a href="/auditar_seguimiento/mascota/$c['enlace_mascota']">Ver historial</a></td>
+        </tr>
+    </tbody>
+    </table></div>
+$else:
+    <div class="vacio"><p>Todas las adopciones activas están al corriente dentro del plazo de 30 días.</p></div>

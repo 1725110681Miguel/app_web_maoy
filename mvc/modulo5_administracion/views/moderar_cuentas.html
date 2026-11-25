@@ -1,0 +1,43 @@
+$def with (cuentas, filtro_estado)
+$var titulo: Moderación de cuentas y refugios
+$var layout: amplia
+<p>Revisa solicitudes de alta de refugios y administra el estado operativo de las cuentas del sistema.</p>
+<div class="filtros" role="navigation" aria-label="Filtrar cuentas por estado">
+    <a class="filtro $('activo' if filtro_estado == 'Todos' else '')" href="/moderar_cuentas?estado=Todos">Todas</a>
+    <a class="filtro $('activo' if filtro_estado == 'Pendiente' else '')" href="/moderar_cuentas?estado=Pendiente">Pendientes</a>
+    <a class="filtro $('activo' if filtro_estado == 'Activo' else '')" href="/moderar_cuentas?estado=Activo">Activas</a>
+    <a class="filtro $('activo' if filtro_estado == 'Suspendido' else '')" href="/moderar_cuentas?estado=Suspendido">Suspendidas</a>
+</div>
+
+$if cuentas:
+    <div class="tabla"><table>
+    <caption>Cuentas registradas ($filtro_estado)</caption>
+    <thead>
+        <tr>
+            <th scope="col">Usuario / Refugio</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Registro</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    $for c in cuentas:
+        <tr>
+            <td data-label="Usuario / Refugio">
+                <strong>$c['nombre_completo']</strong><br>
+                <small>$c['correo']</small>
+            </td>
+            <td data-label="Rol">$c['rol']</td>
+            <td data-label="Estado">
+                <span class="estado" data-estado="$c['estado_cuenta']">$c['estado_cuenta']</span>
+                $if c.get('motivo_suspension'):
+                    <p><small>$c['motivo_suspension']</small></p>
+            </td>
+            <td data-label="Registro">$((c['fecha_registro'] or '')[:10])</td>
+            <td data-label="Acciones"><a href="/moderar_cuentas/$c['enlace']">Revisar y dictaminar</a></td>
+        </tr>
+    </tbody>
+    </table></div>
+$else:
+    <div class="vacio"><p>No hay cuentas registradas con el estado seleccionado.</p></div>

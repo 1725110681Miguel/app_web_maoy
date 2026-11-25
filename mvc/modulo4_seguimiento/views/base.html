@@ -1,0 +1,63 @@
+$def with (contenido, vista_previa=False)
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>$contenido.titulo · AdoPetMyao</title>
+    <link rel="stylesheet" href="/modulo3/estilos.css?v=2">
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="barra">
+    <nav class="navegacion" aria-label="Navegación principal">
+        <a class="marca" href="/" aria-label="AdoPetMyao, inicio">AdoPet<span>Myao</span></a>
+        <div class="enlaces">
+            <a href="/">Inicio</a>
+            <a href="/subir_seguimiento">Mis adopciones</a>
+            <a href="/auditar_seguimiento">Auditoría</a>
+            <a class="enlace-panel" href="/notificar_seguimiento">Control 30 días</a>
+            <a href="/moderar_cuentas">Administración</a>
+        </div>
+    </nav>
+</header>
+<main id="contenido">
+    $if vista_previa:
+        <section class="previa" aria-label="Vista previa del módulo 4">
+            <p><strong>Vista previa · Módulo 4 (Seguimiento Post-Adopción).</strong> Datos simulados para revisar el diseño y flujos.</p>
+            <nav aria-label="Pantallas de demostración">
+                <a href="/subir_seguimiento">Mis adopciones</a>
+                <a href="/subir_seguimiento/demostracion">Subir seguimiento</a>
+                <a href="/auditar_seguimiento">Panel de auditoría</a>
+                <a href="/auditar_seguimiento/demostracion">Detalle y alerta</a>
+                <a href="/notificar_seguimiento">Inactivos &gt;30 días</a>
+            </nav>
+        </section>
+    <div class="cabecera">
+        <p class="rotulo">BIENESTAR ANIMAL / SEGUIMIENTO POST-ADOPCIÓN</p>
+        <h1>$contenido.titulo</h1>
+    </div>
+    <div class="distribucion $('amplia' if contenido.get('layout') == 'amplia' else '')">
+        <div class="contenido">
+            $if vista_previa:
+                <fieldset class="demostracion" disabled aria-label="Contenido de demostración">
+                    $:contenido
+                </fieldset>
+            $else:
+                $:contenido
+        </div>
+        $if contenido.get('layout') != 'amplia':
+            <aside class="orientacion" aria-labelledby="orientacion-titulo">
+                <h2 id="orientacion-titulo">Cuidado continuo</h2>
+                <ol>
+                    <li><strong>Evidencia mensual</strong><span>Sube una foto reciente clara en formato JPG, PNG o WebP.</span></li>
+                    <li><strong>Bienestar</strong><span>Detalla alimentación, estado físico, vacunas y adaptación.</span></li>
+                    <li><strong>Protección activa</strong><span>Refugios y administración supervisan alertas de maltrato.</span></li>
+                </ol>
+                <p>Cada reporte confirma una adopción responsable y segura.</p>
+            </aside>
+    </div>
+</main>
+<footer><strong>AdoPetMyao</strong><span>Seguimiento post-adopción y protección animal.</span></footer>
+</body>
+</html>

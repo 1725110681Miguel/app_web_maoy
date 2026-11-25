@@ -91,6 +91,27 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5
 .previa a { display: inline-flex; align-items: center; min-height: 44px; padding: .4rem .8rem; border: 1px solid #A7BFDE; background: white; border-radius: .5rem; }
 fieldset.demostracion { border: 0; margin: 0; padding: 0; min-width: 0; }
 fieldset.demostracion button { cursor: default; }
+
+/* ── Módulo 4 y 5: componentes adicionales ── */
+.peligro { background: #9E2A2B; color: white; }
+.peligro:hover { background: #7D1F20; }
+.casilla { display: flex; align-items: center; gap: .65rem; font-weight: 600; }
+.casilla input[type="checkbox"] { width: 1.2rem; height: 1.2rem; accent-color: #268B86; }
+.filtros { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.1rem; }
+.filtro { display: inline-flex; align-items: center; min-height: 42px; padding: .45rem .95rem; border-radius: 2rem; border: 1px solid var(--linea); background: white; color: var(--marino); font-weight: 650; text-decoration: none; }
+.filtro.activo { background: var(--marino); color: white; border-color: var(--marino); }
+.tarjetas { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 1.2rem; }
+.tarjeta { background: white; border: 1px solid var(--linea); border-radius: 1rem; box-shadow: 0 6px 24px rgb(16 46 85 / 4%); padding: clamp(1rem, 3vw, 1.5rem); display: grid; gap: .75rem; align-content: start; }
+.tarjeta h2 { margin: 0; font-size: 1.15rem; }
+.foto-marco { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: .75rem; border: 1px solid var(--linea); background: var(--fondo); }
+.foto-detalle { max-width: 28rem; width: 100%; border-radius: .9rem; border: 2px solid var(--marino); margin-bottom: 1.2rem; }
+.estado.alerta, .estado[data-dictamen="Rescatado"] { background: #FDECEB; color: #9E2A2B; border: 1px solid #E29595; }
+.estado.advertencia, .estado[data-dictamen="En Inspección"] { background: #FEF1E4; color: #7D4410; border: 1px solid #F4A261; }
+.estado[data-dictamen="Falsa Alarma"] { background: #E9EDF3; color: #4D5D70; }
+.estado[data-estado="Suspendido"] { background: #FDECEB; color: #9E2A2B; border: 1px solid #E29595; }
+.resumen-aviso, .aviso-admin { background: white; border: 1px solid var(--linea); border-left: 5px solid #268B86; border-radius: 1rem; padding: clamp(1rem, 3vw, 1.5rem); margin-bottom: 1.2rem; box-shadow: 0 6px 24px rgb(16 46 85 / 4%); }
+.resumen-aviso.advertencia, .aviso-admin { border-left-color: #F4A261; }
+
 @media (max-width: 52rem) {
     .distribucion { grid-template-columns: minmax(0, 1fr); }
     .orientacion { margin-top: .5rem; }
@@ -113,4 +134,5 @@ fieldset.demostracion button { cursor: default; }
     form > button, .acciones button { width: 100%; }
     .mensajes .propio { margin-left: 1rem; }
     .mensajes .recibido { margin-right: 1rem; }
+    .tarjetas { grid-template-columns: 1fr; }
 }

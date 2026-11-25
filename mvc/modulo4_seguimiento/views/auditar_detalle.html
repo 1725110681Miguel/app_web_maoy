@@ -1,0 +1,51 @@
+$def with (rol, fila, csrf)
+$var titulo: Expediente de seguimiento
+<p>Revisión detallada del reporte para <strong>$fila['mascotas']['nombre']</strong> ($fila['mascotas']['especie']).</p>
+<img class="foto-detalle" src="/static/fotos/seguimientos/$fila['foto_evidencia']" alt="Evidencia fotográfica de $fila['mascotas']['nombre']">
+<dl>
+    <dt>Adoptante responsable</dt><dd>$fila['usuarios']['nombre_completo'] (Cuenta: $fila['usuarios']['estado_cuenta'])</dd>
+    <dt>Fecha del reporte</dt><dd>$((fila['fecha_reporte'] or '')[:19].replace('T', ' '))</dd>
+    <dt>Comentario del adoptante</dt><dd>$fila['comentario']</dd>
+    <dt>Alerta de maltrato</dt><dd>$("ACTIVA" if fila['alerta_maltrato'] else "Inactiva")</dd>
+    <dt>Dictamen administrativo</dt><dd>$fila['dictamen_admin']</dd>
+    $if fila.get('notas_auditoria'):
+        <dt>Notas de auditoría</dt><dd>$fila['notas_auditoria']</dd>
+</dl>
+
+$if rol == 'Publicador':
+    $if not fila['alerta_maltrato']:
+        <form method="post" action="/auditar_seguimiento/$fila['enlace']">
+            <input type="hidden" name="csrf" value="$csrf">
+            <input type="hidden" name="accion" value="activar_alerta">
+            <p class="ayuda">Si detectas descuido, abandono o lesiones en la evidencia, activa la alerta para intervención administrativa inmediata.</p>
+            <button class="peligro" type="submit">Activar alerta de maltrato</button>
+        </form>
+    $else:
+        <div class="resumen-aviso advertencia"><p>La alerta de maltrato ya se encuentra activa y en revisión por administración.</p></div>
+$else:
+    <form method="post" action="/auditar_seguimiento/$fila['enlace']">
+        <input type="hidden" name="csrf" value="$csrf">
+        <label>Dictamen de intervención
+            <select name="dictamen_admin" required>
+                <option value="Sin Novedad" $('selected' if fila['dictamen_admin'] == 'Sin Novedad' else '')>Sin Novedad</option>
+                <option value="En Inspección" $('selected' if fila['dictamen_admin'] == 'En Inspección' else '')>En Inspección</option>
+                <option value="Rescatado" $('selected' if fila['dictamen_admin'] == 'Rescatado' else '')>Rescatado</option>
+                <option value="Falsa Alarma" $('selected' if fila['dictamen_admin'] == 'Falsa Alarma' else '')>Falsa Alarma</option>
+            </select>
+        </label>
+        <label class="casilla">
+            <input type="checkbox" name="alerta_maltrato" value="si" $('checked' if fila['alerta_maltrato'] else '')>
+            Mantener alerta de maltrato activa
+        </label>
+        <label>Notas de auditoría (obligatorias para dictamen o suspensión)
+            <textarea name="notas_auditoria" maxlength="2000">$(fila.get('notas_auditoria') or '')</textarea>
+        </label>
+        <label class="casilla">
+            <input type="checkbox" name="suspender_adoptante" value="si">
+            Suspender cuenta del adoptante y revocar sus sesiones activas
+        </label>
+        <div class="acciones">
+            <button type="submit">Guardar dictamen</button>
+            <a class="boton secundario" href="/auditar_seguimiento">Volver al panel</a>
+        </div>
+    </form>

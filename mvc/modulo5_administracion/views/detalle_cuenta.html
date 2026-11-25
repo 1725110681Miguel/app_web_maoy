@@ -1,0 +1,36 @@
+$def with (cuenta, enlace, csrf, es_propia)
+$var titulo: Dictamen de cuenta
+<p>Expediente administrativo de <strong>$cuenta['nombre_completo']</strong>.</p>
+<dl>
+    <dt>Correo electrónico</dt><dd>$cuenta['correo']</dd>
+    <dt>Teléfono</dt><dd>$cuenta['telefono']</dd>
+    <dt>Dirección</dt><dd>$cuenta['direccion']</dd>
+    <dt>Rol</dt><dd>$cuenta['rol']</dd>
+    <dt>Estado actual</dt><dd><span class="estado" data-estado="$cuenta['estado_cuenta']">$cuenta['estado_cuenta']</span></dd>
+    <dt>Fecha de registro</dt><dd>$((cuenta['fecha_registro'] or '')[:19].replace('T', ' '))</dd>
+    $if cuenta.get('motivo_suspension'):
+        <dt>Motivo registrado</dt><dd>$cuenta['motivo_suspension']</dd>
+</dl>
+
+$if es_propia or cuenta['rol'] == 'Admin':
+    <div class="aviso-admin">
+        <p>Las cuentas administrativas no pueden ser aprobadas, rechazadas ni suspendidas desde este panel.</p>
+        <p><a class="boton secundario" href="/moderar_cuentas">Volver al listado</a></p>
+    </div>
+$else:
+    <form method="post" action="/moderar_cuentas/$enlace">
+        <input type="hidden" name="csrf" value="$csrf">
+        <label>Motivo del dictamen (obligatorio al rechazar o suspender)
+            <textarea name="motivo" maxlength="1500" placeholder="Describe las razones de aprobación, rechazo o suspensión..."></textarea>
+        </label>
+        <div class="acciones">
+            $if cuenta['estado_cuenta'] == 'Pendiente':
+                <button type="submit" name="accion" value="Aprobar">Aprobar refugio</button>
+                <button type="submit" class="peligro" name="accion" value="Rechazar">Rechazar solicitud</button>
+            $elif cuenta['estado_cuenta'] == 'Activo':
+                <button type="submit" class="peligro" name="accion" value="Suspender">Suspender cuenta</button>
+            $else:
+                <button type="submit" name="accion" value="Reactivar">Reactivar cuenta</button>
+            <a class="boton secundario" href="/moderar_cuentas">Volver al listado</a>
+        </div>
+    </form>

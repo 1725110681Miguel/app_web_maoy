@@ -1,0 +1,22 @@
+$def with (adopciones)
+$var titulo: Mis adopciones y reportes
+$var layout: amplia
+<p>Consulta tus mascotas adoptadas y envía el reporte fotográfico mensual para mantener su seguimiento al día.</p>
+$if adopciones:
+    <div class="tarjetas">
+    $for a in adopciones:
+        <article class="tarjeta">
+            <img class="foto-marco" src="/static/fotos/mascotas/$a['foto']" alt="Fotografía de $a['nombre']">
+            <h2>$a['nombre']</h2>
+            <p>$a['especie'] · $a['raza']</p>
+            <p><strong>Adoptada:</strong> $a['fecha_adopcion']</p>
+            <p><strong>Último reporte:</strong> $(a['ultimo_reporte'] or "Sin reportes aún")</p>
+            $if a['atrasado']:
+                <p><span class="estado advertencia">Atrasado ($a['dias_sin_reporte'] días)</span></p>
+            $else:
+                <p><span class="estado">Al corriente ($a['dias_sin_reporte'] días)</span></p>
+            <a class="boton" href="/subir_seguimiento/$a['enlace']">Enviar reporte mensual</a>
+        </article>
+    </div>
+$else:
+    <div class="vacio"><p>Aún no tienes adopciones cerradas activas para seguimiento.</p></div>

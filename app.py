@@ -14,6 +14,10 @@ from mvc.modulo3_solicitudes.controllers.estilos import Estilos
 from mvc.modulo3_solicitudes.controllers.lista_solicitudes import ListaSolicitudes
 from mvc.modulo3_solicitudes.controllers.mensajeria_solicitud import MensajeriaSolicitud
 from mvc.modulo3_solicitudes.controllers.programar_cita import ProgramarCita
+from mvc.modulo4_seguimiento.controllers.auditar_seguimiento import AuditarSeguimiento
+from mvc.modulo4_seguimiento.controllers.notificar_seguimiento import NotificarSeguimiento
+from mvc.modulo4_seguimiento.controllers.subir_seguimiento import SubirSeguimiento
+from mvc.modulo5_administracion.controllers.moderar_cuentas import ModerarCuentas
 
 RAIZ = Path(__file__).resolve().parent
 load_dotenv(RAIZ / ".env")
@@ -35,6 +39,13 @@ urls = (
     "/evaluar_solicitud/(.*)", "EvaluarSolicitud",
     "/programar_cita/(.*)", "ProgramarCita",
     "/mensajeria_solicitud/(.*)", "MensajeriaSolicitud",
+    "/subir_seguimiento", "SubirSeguimiento",
+    "/subir_seguimiento/(.*)", "SubirSeguimiento",
+    "/auditar_seguimiento", "AuditarSeguimiento",
+    "/auditar_seguimiento/(.*)", "AuditarSeguimiento",
+    "/notificar_seguimiento", "NotificarSeguimiento",
+    "/moderar_cuentas", "ModerarCuentas",
+    "/moderar_cuentas/(.*)", "ModerarCuentas",
 )
 
 app = web.application(urls, globals())
