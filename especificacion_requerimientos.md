@@ -1,4 +1,4 @@
-# 3.1 Especificación de Requerimientos: Aplicación Web Segura para la Adopción Responsable de Mascotas v23.11.2026.2
+# 3.1 Especificación de Requerimientos: AdoPetMyao — Aplicación Web Segura para la Adopción Responsable de Mascotas v23.11.2026.2
 
 ---
 

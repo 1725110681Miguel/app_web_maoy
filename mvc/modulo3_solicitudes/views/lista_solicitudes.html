@@ -5,7 +5,7 @@ $if filas:
     <caption>$("Solicitudes enviadas" if rol == "Adoptante" else "Solicitudes recibidas")</caption>
     <thead><tr><th scope="col">Mascota</th><th scope="col">Fecha</th><th scope="col">Estado</th><th scope="col">Opciones</th></tr></thead><tbody>
     $for f in filas:
-        <tr><td data-label="Mascota">$f['mascotas']['nombre']</td><td data-label="Fecha">$(f['fecha_solicitud'][:10])</td><td data-label="Estado"><span class="estado">$f['estado_solicitud']</span>
+        <tr><td data-label="Mascota">$f['mascotas']['nombre']</td><td data-label="Fecha">$(f['fecha_solicitud'][:10])</td><td data-label="Estado"><span class="estado" data-estado="$f['estado_solicitud']">$f['estado_solicitud']</span>
         $if f.get('motivo_rechazo'):
             <p>$f['motivo_rechazo']</p>
         </td><td data-label="Opciones">

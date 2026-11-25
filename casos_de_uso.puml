@@ -33,7 +33,7 @@ actor "Sistema Automático\n(Temporizador diario)" as SIS
 ' ==============================================================================
 ' EL RECTÁNGULO CENTRAL (Límite del Sistema / Aplicación Web)
 ' ==============================================================================
-rectangle "Sistema Web de Adopción Responsable de Mascotas" as SistemaWeb {
+rectangle "AdoPetMyao — Sistema Web de Adopción Responsable de Mascotas" as SistemaWeb {
 
     ' Cuentas y Acceso
     usecase "RF-01: Registrar cuenta de usuario / refugio" as RF01

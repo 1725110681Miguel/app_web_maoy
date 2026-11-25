@@ -10,6 +10,7 @@ from mvc.modulo3_solicitudes.controllers.cancelar_solicitud import CancelarSolic
 from mvc.modulo3_solicitudes.controllers.cuestionario_aptitud import CuestionarioAptitud
 from mvc.modulo3_solicitudes.controllers.enviar_solicitud import EnviarSolicitud
 from mvc.modulo3_solicitudes.controllers.evaluar_solicitud import EvaluarSolicitud
+from mvc.modulo3_solicitudes.controllers.estilos import Estilos
 from mvc.modulo3_solicitudes.controllers.lista_solicitudes import ListaSolicitudes
 from mvc.modulo3_solicitudes.controllers.mensajeria_solicitud import MensajeriaSolicitud
 from mvc.modulo3_solicitudes.controllers.programar_cita import ProgramarCita
@@ -26,6 +27,7 @@ web.config.session_parameters.secure = os.getenv("COOKIE_SEGURA", "false").lower
 
 urls = (
     "/", "Index",
+    r"/modulo3/estilos\.css", "Estilos",
     "/cuestionario_aptitud/(.*)", "CuestionarioAptitud",
     "/enviar_solicitud/(.*)", "EnviarSolicitud",
     "/lista_solicitudes", "ListaSolicitudes",

@@ -1,19 +1,59 @@
-$def with (contenido)
+$def with (contenido, vista_previa=False)
 <!doctype html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>$contenido.titulo · AdopetMAOW</title>
-    <link rel="stylesheet" href="/static/css/solicitudes.css">
+    <title>$contenido.titulo · AdoPetMyao</title>
+    <link rel="stylesheet" href="/modulo3/estilos.css?v=2">
 </head>
 <body>
 <a class="saltar" href="#contenido">Saltar al contenido</a>
-<header><nav aria-label="Navegación principal"><a class="marca" href="/">Adopet<span>MAOW</span></a><div class="enlaces"><a href="/">Inicio</a><a href="/lista_solicitudes">Mis solicitudes</a></div></nav></header>
+<header class="barra">
+    <nav class="navegacion" aria-label="Navegación principal">
+        <a class="marca" href="/" aria-label="AdoPetMyao, inicio">AdoPet<span>Myao</span></a>
+        <div class="enlaces"><a href="/">Inicio</a><a class="enlace-panel" href="/lista_solicitudes">Mis solicitudes</a></div>
+    </nav>
+</header>
 <main id="contenido">
-    <h1>$contenido.titulo</h1>
-    $:contenido
+    $if vista_previa:
+        <section class="previa" aria-label="Vista previa del módulo 3">
+            <p><strong>Vista previa · Datos simulados.</strong> Solo para revisar el diseño. Los formularios están desactivados y no se guarda información.</p>
+            <nav aria-label="Pantallas de demostración">
+                <a href="/cuestionario_aptitud/demostracion">Cuestionario</a>
+                <a href="/enviar_solicitud/demostracion">Confirmación</a>
+                <a href="/lista_solicitudes">Solicitudes</a>
+                <a href="/cancelar_solicitud/demostracion">Cancelación</a>
+                <a href="/evaluar_solicitud/demostracion">Evaluación</a>
+                <a href="/programar_cita/demostracion">Cita</a>
+                <a href="/mensajeria_solicitud/demostracion">Mensajes</a>
+            </nav>
+        </section>
+    <div class="cabecera">
+        <p class="rotulo">ADOPCIÓN RESPONSABLE / SOLICITUDES Y COMUNICACIÓN</p>
+        <h1>$contenido.titulo</h1>
+    </div>
+    <div class="distribucion $('amplia' if contenido.titulo == 'Mis solicitudes' else '')">
+        <div class="contenido">
+            $if vista_previa:
+                <fieldset class="demostracion" disabled aria-label="Contenido de demostración">
+                    $:contenido
+                </fieldset>
+            $else:
+                $:contenido
+        </div>
+        $if contenido.titulo != 'Mis solicitudes':
+            <aside class="orientacion" aria-labelledby="orientacion-titulo">
+                <h2 id="orientacion-titulo">Una nueva historia comienza aquí</h2>
+                <ol>
+                    <li><strong>Comparte</strong><span>Cuéntanos sobre tu hogar y los cuidados que puedes ofrecer.</span></li>
+                    <li><strong>Solicita</strong><span>El publicador revisará la solicitud y te dará una respuesta.</span></li>
+                    <li><strong>Conecta</strong><span>Conversa y coordina los siguientes pasos de la adopción.</span></li>
+                </ol>
+                <p>Adoptar es un compromiso de cuidado, tiempo y compañía.</p>
+            </aside>
+    </div>
 </main>
-<footer>AdopetMAOW · Cada paso cuenta para una adopción responsable.</footer>
+<footer><strong>AdoPetMyao</strong><span>Cada paso cuenta para una adopción responsable.</span></footer>
 </body>
 </html>
