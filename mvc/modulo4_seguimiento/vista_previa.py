@@ -3,13 +3,13 @@ import logging
 
 import web
 
-from .controllers.estilos import Estilos
+from mvc.modulo3_solicitudes.controllers.estilos import Estilos
 from .controllers.vista_previa import VistaPrevia
 
 logger = logging.getLogger(__name__)
 
 urls = (
-    r"/modulo4/estilos\.css", "Estilos",
+    r"/modulo3/estilos\.css", "Estilos",
     "/", "VistaPrevia",
     "/subir_seguimiento", "VistaPrevia",
     "/subir_seguimiento/(demostracion)", "VistaPrevia",

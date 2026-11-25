@@ -13,7 +13,7 @@ class VistaPrevia:
 
     def GET(self, enlace: str = "") -> str:
         ruta = web.ctx.path.strip("/")
-        pagina = ruta.split("/")[0] or "mis_adopciones"
+        pagina = ruta.split("/")[0] or "subir_seguimiento"
 
         if pagina == "subir_seguimiento" and not enlace:
             contenido = render.mis_adopciones([
