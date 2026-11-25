@@ -13,7 +13,10 @@ $def with (usuario=None, nombre=None, token='')
     <nav aria-label="Navegación principal">
         <a class="marca" href="/" aria-label="AdoPetMyao, inicio">AdoPet<span>Myao</span></a>
         $if usuario:
-            <div class="enlaces"><a href="/" aria-current="page">Inicio</a><a href="/lista_solicitudes">Mis solicitudes</a><span class="saludo">Hola, $nombre</span>
+            <div class="enlaces"><a href="/" aria-current="page">Inicio</a>
+                $if usuario['rol'] == 'Admin':
+                    <a href="/moderar_cuentas">Moderar cuentas</a>
+                <a href="/lista_solicitudes">Mis solicitudes</a><span class="saludo">Hola, $nombre</span>
                 <form class="sesion" method="post" action="/cerrar_sesion"><input type="hidden" name="csrf" value="$token"><button type="submit">Cerrar sesión</button></form>
             </div>
         $else:

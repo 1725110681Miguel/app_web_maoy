@@ -16,7 +16,21 @@ import web
 from mvc.compartido.seguridad import verificar
 
 logger = logging.getLogger(__name__)
-render = web.template.render(str(Path(__file__).resolve().parents[1] / "views"), base="base")
+def csrf_sesion() -> str:
+    """Token CSRF de la sesión, para el formulario de cerrar sesión del layout."""
+    try:
+        if getattr(web.ctx, "session", None) is not None:
+            return csrf()
+    except Exception:
+        return ""
+    return ""
+
+
+render = web.template.render(
+    str(Path(__file__).resolve().parents[1] / "views"),
+    base="base",
+    globals={"csrf_sesion": csrf_sesion},
+)
 
 
 def validar_enlace(valor: str) -> int:

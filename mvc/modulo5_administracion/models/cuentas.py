@@ -16,6 +16,13 @@ CAMPOS_CUENTA = (
 )
 ESTADOS_CUENTA = ("Pendiente", "Activo", "Suspendido")
 ACCIONES_MODERACION = ("Aprobar", "Rechazar", "Suspender", "Reactivar")
+# La RPC en Supabase recibe estados (Activo/Pendiente/Suspendido), no los nombres de botón.
+ACCION_A_ESTADO = {
+    "Aprobar": "Activo",
+    "Rechazar": "Suspendido",
+    "Suspender": "Suspendido",
+    "Reactivar": "Activo",
+}
 
 
 class CuentaUsuario(TypedDict):
@@ -77,9 +84,9 @@ def moderar_cuenta(admin_id: int, objetivo_id: int, accion: str, motivo: str = "
     ejecutar(
         "maow_moderar_cuenta",
         {
-            "admin_id": admin_id,
-            "objetivo_id": objetivo_id,
-            "accion": accion,
+            "actor": admin_id,
+            "usuario": objetivo_id,
+            "nuevo_estado": ACCION_A_ESTADO[accion],
             "motivo": motivo or None,
         },
     )

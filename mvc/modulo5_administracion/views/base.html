@@ -17,6 +17,8 @@ $def with (contenido, vista_previa=False)
             <a href="/auditar_seguimiento">Auditoría</a>
             <a href="/notificar_seguimiento">Control 30 días</a>
             <a class="enlace-panel" href="/moderar_cuentas">Moderar cuentas</a>
+            $if csrf_sesion():
+                <form class="sesion" method="post" action="/cerrar_sesion"><input type="hidden" name="csrf" value="$csrf_sesion()"><button type="submit">Cerrar sesión</button></form>
         </div>
     </nav>
 </header>
