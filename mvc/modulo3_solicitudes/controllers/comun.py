@@ -2,7 +2,12 @@ import hmac
 import logging
 import secrets
 from pathlib import Path
-from typing import Any, Never
+from typing import Any
+
+try:
+    from typing import Never
+except ImportError:  # Python < 3.11
+    from typing_extensions import Never
 
 import web
 

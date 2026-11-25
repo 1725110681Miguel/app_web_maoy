@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import hashlib
 import hmac
 import logging
@@ -32,3 +34,24 @@ def verificar(valor: str) -> int | None:
     if hmac.compare_digest(firmar(identificador), valor):
         return identificador
     return None
+
+
+ITERACIONES_PBKDF2 = 390000
+
+
+def cifrar_password(password: str) -> str:
+    """Hash PBKDF2-SHA256 con sal aleatoria: pbkdf2_sha256$iteraciones$sal$hash."""
+    sal = os.urandom(16).hex()
+    resumen = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), bytes.fromhex(sal), ITERACIONES_PBKDF2)
+    return f"pbkdf2_sha256${ITERACIONES_PBKDF2}${sal}${resumen.hex()}"
+
+
+def comprobar_password(password: str, guardado: str) -> bool:
+    try:
+        algoritmo, iteraciones, sal, esperado = guardado.split("$")
+        if algoritmo != "pbkdf2_sha256":
+            return False
+        resumen = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), bytes.fromhex(sal), int(iteraciones))
+        return hmac.compare_digest(resumen.hex(), esperado)
+    except (ValueError, TypeError):
+        return False

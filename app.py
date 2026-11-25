@@ -5,6 +5,9 @@ from pathlib import Path
 import web
 from dotenv import load_dotenv
 
+from mvc.modulo1_autenticacion.controllers.cerrar_sesion import CerrarSesion
+from mvc.modulo1_autenticacion.controllers.login import Login
+from mvc.modulo1_autenticacion.controllers.registro import Registro
 from mvc.modulo2_catalogo.controllers.index import Index
 from mvc.modulo3_solicitudes.controllers.cancelar_solicitud import CancelarSolicitud
 from mvc.modulo3_solicitudes.controllers.cuestionario_aptitud import CuestionarioAptitud
@@ -26,11 +29,15 @@ logging.basicConfig(filename=RAIZ / "aplicacion.log", level=logging.INFO,
                     datefmt="%Y-%m-%d %H:%M:%S", encoding="utf-8")
 logging.getLogger("httpx").setLevel(logging.WARNING)
 web.config.debug = False
+web.config.session_parameters.httponly = True
 web.config.session_parameters.samesite = "Lax"
 web.config.session_parameters.secure = os.getenv("COOKIE_SEGURA", "false").lower() == "true"
 
 urls = (
     "/", "Index",
+    "/registro", "Registro",
+    "/login", "Login",
+    "/cerrar_sesion", "CerrarSesion",
     r"/modulo3/estilos\.css", "Estilos",
     "/cuestionario_aptitud/(.*)", "CuestionarioAptitud",
     "/enviar_solicitud/(.*)", "EnviarSolicitud",

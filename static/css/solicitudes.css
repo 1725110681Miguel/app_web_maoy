@@ -126,3 +126,18 @@ nav a, td a { min-height: 2.75rem; display: inline-flex; align-items: center; }
     .mensajes .propio { margin-left: 1rem; }
     .mensajes .recibido { margin-right: 1rem; }
 }
+/* Módulo 1: autenticación */
+.acceso { max-width: 44rem; }
+.acceso h1 { margin-bottom: .5rem; }
+.alerta { max-width: 44rem; margin: 1.2rem 0 0; padding: .9rem 1.1rem; border-radius: .8rem; border: 1px solid; font-weight: 600; }
+.alerta ul { margin: 0; padding-left: 1.2rem; }
+.alerta.error { background: #fdecec; border-color: #e3a0a0; color: #8a1f1f; }
+.alerta.exito { background: #e8f6f1; border-color: #8fcfb8; color: #14523f; }
+.roles { border: 1px solid var(--linea); border-radius: .8rem; padding: 1rem; display: grid; gap: .8rem; }
+.roles legend { font-weight: 700; padding: 0 .4rem; color: var(--marino); }
+.roles .opcion { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-weight: 600; }
+.roles .opcion input { width: auto; }
+.roles .opcion small { flex-basis: 100%; font-weight: 400; padding-left: 1.6rem; }
+.sesion { display: inline; margin: 0; padding: 0; border: 0; box-shadow: none; background: none; }
+.sesion button { padding: .45rem .9rem; border-radius: 2rem; }
+.saludo { color: var(--secundario); font-weight: 600; }

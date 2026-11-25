@@ -1,4 +1,4 @@
-$def with ()
+$def with (usuario=None, nombre=None, token='')
 <!doctype html>
 <html lang="es">
 <head>
@@ -12,7 +12,12 @@ $def with ()
 <header>
     <nav aria-label="Navegación principal">
         <a class="marca" href="/" aria-label="AdoPetMyao, inicio">AdoPet<span>Myao</span></a>
-        <div class="enlaces"><a href="/" aria-current="page">Inicio</a><a href="/login">Iniciar sesión</a><a class="registro" href="/registro">Registrarse</a></div>
+        $if usuario:
+            <div class="enlaces"><a href="/" aria-current="page">Inicio</a><a href="/lista_solicitudes">Mis solicitudes</a><span class="saludo">Hola, $nombre</span>
+                <form class="sesion" method="post" action="/cerrar_sesion"><input type="hidden" name="csrf" value="$token"><button type="submit">Cerrar sesión</button></form>
+            </div>
+        $else:
+            <div class="enlaces"><a href="/" aria-current="page">Inicio</a><a href="/login">Iniciar sesión</a><a class="registro" href="/registro">Registrarse</a></div>
     </nav>
 </header>
 <main id="contenido">

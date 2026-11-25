@@ -1,0 +1,23 @@
+$def with (contenido)
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>$contenido.titulo · AdoPetMyao</title>
+    <link rel="stylesheet" href="/static/css/solicitudes.css?v=2">
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header>
+    <nav aria-label="Navegación principal">
+        <a class="marca" href="/" aria-label="AdoPetMyao, inicio">AdoPet<span>Myao</span></a>
+        <div class="enlaces"><a href="/">Inicio</a><a href="/login">Iniciar sesión</a><a class="registro" href="/registro">Registrarse</a></div>
+    </nav>
+</header>
+<main id="contenido" class="acceso">
+    $:contenido
+</main>
+<footer>AdoPetMyao · Adopción responsable, una historia a la vez.</footer>
+</body>
+</html>
